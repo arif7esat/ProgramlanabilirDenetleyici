@@ -1,0 +1,83 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 21.04.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+
+DEFINE LOADER_USED 1
+ADCON1=7
+TRISB=0
+TRISA=0
+PORTB=0
+PORTA=0
+i var byte
+j var byte
+k var byte
+i=1
+sayac var byte
+sayac=0
+birler var byte
+onlar var byte
+
+motor var byte[4]
+motor[0]=3
+motor[1]=6
+motor[2]=12
+motor[3]=9
+
+a var byte[10]
+a[0]=%00111111
+a[1]=%00000110
+a[2]=%01011011
+a[3]=%01001111
+a[4]=%01100110
+a[5]=%01101101
+a[6]=%01111101
+a[7]=%00000111
+a[8]=%01111111
+a[9]=%01101111
+l var byte
+label:
+    i=l
+    for k=0 to 51
+    gosub ileri
+    next k
+    l=i
+    sayac=sayac+1
+    gosub yaz
+
+goto label
+
+ileri:
+    pulsout portA.2,100
+     i=i+1
+    if i=4 then i=0
+    portB=motor[i]  :pause 100
+     
+return
+
+yaz:
+birler=sayac dig 0
+onlar=sayac dig 1
+    for j=0 to 24
+        portA.0=0:portA.1=1    ' portB ' yi ortak kullanmasýn dýye
+        portB=a[birler]
+        pause 10
+        
+        portA.0=1:portA.1=0
+        portB=a[onlar]
+        pause 10
+    
+     next j
+   portA=0
+   portB=0
+return
+        
+
+        
+

@@ -1,0 +1,45 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 14.04.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+ADCON1=7
+TRISB=0
+TRISA=0
+portB=0
+PortA=0
+
+i var byte
+i=1
+'tek fazli
+label1:
+ 
+pulsout portA.2,100
+if i=16 then goto label2
+portB=i :pause 500
+i=i<<1
+goto label1
+
+
+label2:
+
+pulsout portA.2,100 
+i=i>>1
+portB=i :pause 500
+if i=1 then goto label1  
+
+
+goto label2
+
+
+
+
+
+
+

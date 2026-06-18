@@ -1,0 +1,77 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 17.03.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+'lcd
+DEFINE LOADER_USED 1
+DEFINE LCD_DREG PORTD
+DEFINE LCD_DBIT 0
+DEFINE LCD_RSREG PORTE
+DEFINE LCD_RSBIT 0
+DEFINE LCD_EREG PORTE
+DEFINE  LCD_EBIT 2
+DEFINE LCD_BITS 8
+TRISE=%000
+PortE.1=0
+ADCON1=7
+PAUSE 100
+
+DEFINE HSER_RCSTA 90h
+DEFINE HSER_TXSTA 24h
+DEFINE HSER_BAUD 9600
+DEFINE HSER_CLROERR 1
+
+
+i var byte
+LCDOUT $FE,$40, 0, 10, 0, 17, 17, 17, 31, 0
+LCDOUT $FE,$48, 31, 17, 10, 4, 10, 31, 0, 0
+'label:
+'for i=10 to 0  step -1
+'    lcdout $fe,1
+'    lcdout $fe,$80,#i
+'    pause 100
+'next i
+
+'lcdout $fe,1
+'    lcdout $fe,$C0,"boom  " ,0," ",1
+'    pause 500
+'goto label
+    
+
+ 
+ 
+'label:
+'lcdout $fe,1
+'    lcdout $fe,$80,0,"  ",1
+'    pause 500
+'goto label 
+
+
+label:
+    hserout["karakter girin: ",13,10]
+    hserin [i]
+    hserout[i]
+
+    lcdout $fe,1
+    lcdout $fe,$80,i
+    pause 500
+goto label
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    

@@ -1,0 +1,158 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 21.04.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+ADCON1=7
+
+DEFINE HSER_RCSTA 90h
+DEFINE HSER_TXSTA 24h
+DEFINE HSER_BAUD 9600
+DEFINE HSER_SPBRG 25
+DEFINE HSER_CLROERR 1
+
+TRISA=0
+PortA=0
+TRISB=0
+PORTB=0
+sayac var byte
+sayac=0
+i var byte
+
+x var byte
+k var byte
+c var byte
+d var byte
+birler var byte
+onlar var byte
+
+motor var byte[4]
+motor[0]=3
+motor[1]=6
+motor[2]=12
+motor[3]=9
+m var byte
+
+sayacIleri var byte
+sayacGeri var byte
+sayacIleri=0:sayacGeri=0
+
+a var byte[10]
+a[0]=%00111111
+a[1]=%00000110
+a[2]=%01011011
+a[3]=%01001111
+a[4]=%01100110
+a[5]=%01101101
+a[6]=%01111101
+a[7]=%00000111
+a[8]=%01111111
+a[9]=%01101111
+
+b var byte[2]
+b[0]=%00110111 'N
+b[1]=%00111111 '0
+j var byte
+
+c=0:d=0:i=0:j=0
+
+hserout["tusa basiniz"]
+label:
+    hserin 10,devam,[x]
+    devam:
+     if x= "d" then   'd ye basýlý oldugu surece ýlerýye gýdiyor
+       gosub ileri :x=" " 
+       c=c+1
+       if c=51 then  c=0:sayacIleri=sayacIleri+1 :gosub hesapla
+     endif
+        
+    
+     if x= "a" then  
+         gosub geri :x=" " 
+         d=d+1
+         if d=51 then  d=0:sayacGeri=sayacGeri+1:gosub hesapla
+     endif
+goto label
+     
+
+ileri:
+    portA=0
+    pulsout portA.2,100
+     i=i+1
+    if i=4 then i=0
+    portB=motor[i]  :pause 10
+     
+return
+
+geri:
+     portA=0
+     pulsout portA.2,100
+      if i=0 then i=4
+      portB=motor[i]  :pause 10
+       i=i-1
+return
+     
+
+yaz:
+   
+    birler=sayac dig 0
+    onlar=sayac dig 1
+        for j=0 to 24
+            portA.0=0:portA.1=1    
+            portB=a[birler]
+            pause 10
+            
+            portA.0=1:portA.1=0
+            portB=a[onlar]
+            pause 10
+        
+         next j
+       portA=0
+       portB=0
+return
+
+yaz1:
+    for j=0 to 24
+        portA.0=0:portA.1=1    
+        portB=b[1] '0  birler
+        pause 10
+        
+        portA.0=1:portA.1=0
+        portB=b[0]  'N   onlar
+        pause 10
+    
+     next j
+   
+    hserin 10,yaz1,[x]
+    if x="d"  then goto label
+goto yaz1
+        
+
+
+hesapla: 
+        if sayacIleri>=sayacGeri  then 
+            sayac=sayacIleri-sayacGeri:gosub yaz
+       else
+        goto yaz1
+       endif
+return
+
+
+
+
+
+
+
+
+
+
+
+
+
+

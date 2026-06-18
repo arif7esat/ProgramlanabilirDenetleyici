@@ -1,0 +1,63 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 9.04.2026                                         *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+DEFINE LCD_DREG PORTD
+DEFINE LCD_DBIT 0
+DEFINE LCD_RSREG PORTE
+DEFINE LCD_RSBIT 0
+DEFINE LCD_EREG PORTE
+DEFINE  LCD_EBIT 2
+DEFINE LCD_BITS 8
+TRISE=%000
+PortE.1=0
+ADCON1=7
+PAUSE 100
+
+DEFINE HSER_RCSTA 90h
+DEFINE HSER_TXSTA 24h
+DEFINE HSER_BAUD 9600
+DEFINE HSER_CLROERR 1
+
+symbol trigger=portB.7
+symbol echo=portB.6
+salinim var word
+mesafe var word
+Y var word
+x var word  
+sonuc_cm con 6
+trigger=0
+
+gosub oku 
+label: 
+    
+    gosub oku1
+    lcdout $fe,1
+  
+    lcdout "X: " ,#mesafe ," cm" ," Y: " ,#Y ," cm"
+    lcdout $fe,192,"boy: " ,#(mesafe-Y) ," cm"
+    pause 100
+
+ goto label
+ 
+ oku:
+    pulsout trigger,1
+    pulsin echo,1,salinim
+    mesafe=(salinim/sonuc_cm)
+    pause 10
+ return
+ 
+ 
+ oku1:
+    pulsout trigger,1
+    pulsin echo,1,salinim
+    Y=(salinim/sonuc_cm)
+    pause 10
+ return

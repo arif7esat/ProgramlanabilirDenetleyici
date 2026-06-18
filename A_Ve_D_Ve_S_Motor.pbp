@@ -1,0 +1,61 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 21.04.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+ADCON1=7
+
+DEFINE HSER_RCSTA 90h
+DEFINE HSER_TXSTA 24h
+DEFINE HSER_BAUD 9600
+DEFINE HSER_SPBRG 25
+DEFINE HSER_CLROERR 1
+
+TRISA=0
+PortA=0
+TRISB=0
+PORTB=0
+
+i var byte
+i = 1
+
+x var byte
+  hserout["tusa basiniz"]
+label:
+
+
+    hserin 10,devam,[x]
+    
+    devam:
+    if x= "w" then  gosub ileri  'w tusuna býr kez basýlýnca sureklý ileri gýder
+    
+     if x= "s" then  gosub geri   's tusuna býr kez basýlýnca sureklý ileri gýder
+     
+     if x= "a" then  gosub ileri :x=" "  'a tusuna basýlý oldugu surece ileri gider
+    
+     if x= "d" then  gosub geri: x=" "  'd ye basýlý oldugu surece geri gider
+     
+     
+       
+       
+goto label
+
+ileri:
+    pulsout portA.2,100
+    portB=i  :pause 10
+    i=i<<1
+    if i=16 then i=1
+return
+        
+geri:
+    pulsout portA.2,100
+    portB=i  :pause 10
+    i=i>>1
+    if i=0 then i=8
+return

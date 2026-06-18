@@ -1,0 +1,104 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 5.05.2026                                         *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+TRISA=0
+PortA=0
+TRISA=%001100
+
+PORTB=0
+ADCON1=7
+
+
+x var byte
+i var byte
+j var byte
+i=0:j=0
+a var byte[10]
+a[0]=%00111111
+a[1]=%00000110
+a[2]=%01011011
+a[3]=%01001111
+a[4]=%01100110
+a[5]=%01101101
+a[6]=%01111101
+a[7]=%00000111
+a[8]=%01111111
+a[9]=%01101111
+
+
+portA.4=1  'led sonuk
+termostatDeger var byte 
+termostatDeger=0
+
+birler var byte
+onlar var byte
+
+symbol led =portA.4
+symbol basla=portA.2
+symbol artir=portA.3
+
+portA.0=1  'adc disable
+
+label:
+    
+    Gosub oku  'oda sýcaklýgýný al
+    Gosub  yaz ' oda sýcaklýgýný yaz
+    while basla=0   'butona basýldýysa
+       gosub termostat
+    wend
+     if i>=termostatDeger then  'i=oda sýcaklýgý 
+        led=0 'klima acildi led yandi
+     else
+        led=1  'led sondu
+     endif
+   
+        
+ goto label
+
+  oku:
+    portA.0=0 ' ADC entegresi okuma modunda veri gonderiyor ADC enable
+    TRISB=%11111111
+    i=portB
+  return 
+ 
+
+ yaz:
+    portA.0=1  'ADC disable
+     TRISB=0
+     birler=i dig 0
+     onlar=i DiG 1
+             for j=0 to 25
+                     portA.1=1
+                     portB=a[birler]
+                     pause 10
+                     portA.1=0
+                     portB=a[onlar]
+                     pause 10
+              next j
+  
+ return 
+ 
+termostat:
+    i=termostatDeger
+    gosub yaz
+    while artir=0
+         termostatDeger= termostatDeger+1
+         i=termostatDeger:gosub yaz
+         pause 500
+       
+    wend
+return 
+
+
+
+'A4 0 verince led yakma 1 verince sonme
+'A2 0 olunca butona basýldý
+'A2 A3 giris

@@ -1,0 +1,26 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 14.04.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+ADCON1=7
+TRISB=0
+TRISA=0
+PORTB=0
+PORTA=0
+i var byte
+j var byte
+
+label:
+portB=%00000001
+portB=%00000010
+portB=%00000100
+portB=%00001000
+
+goto label

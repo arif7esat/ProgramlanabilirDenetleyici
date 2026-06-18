@@ -1,0 +1,99 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 12.05.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+DEFINE LCD_DREG PORTD
+DEFINE LCD_DBIT 0
+DEFINE LCD_RSREG PORTE
+DEFINE LCD_RSBIT 0
+DEFINE LCD_EREG PORTE
+DEFINE  LCD_EBIT 2
+DEFINE LCD_BITS 8
+TRISE=%000
+PortE.1=0
+ADCON1=7
+PAUSE 100
+
+TRISB=0 :PORTB=0
+DEFINE HSER_RCSTA 90h
+DEFINE HSER_TXSTA 24h
+DEFINE HSER_BAUD 9600
+DEFINE HSER_CLROERR 1
+
+TRISA=0
+PortA=0
+
+
+i var byte
+i=0
+j var byte
+j=0
+LCDOUT $FE,$40, 0, 0, 14, 10, 14, 0, 0, 0  'kutucuk yani led sonuk ýcýn ýsýgý olmayan gunes  0
+LCDOUT $FE,$48, 7, 5, 7, 0, 0, 0, 0, 0      'derece boncugu    1
+LCDOUT $FE,$50, 4, 21, 14, 27, 14, 21, 4, 0  ' led yandý isiklarý acýldý  2
+
+
+
+label:
+hserin 100,devam,[wait(" ")] '100 ms bekle space basýlýrsa ayarla ya gýt gelemzse devam a 
+gosub ayarla
+
+devam:
+gosub oku
+gosub yaz
+
+if i>=j  then
+    lcdout $fe,142,2 'oda sýcaklýgý daha buyukse gunes yansýn
+else
+    lcdout $fe,142,0   'degýlse isiksiz
+endif
+    
+
+goto label
+
+
+ oku:
+    portA.0=0 ' ADC entegresi okuma modunda veri gonderiyor ADC enable
+    TRISB=%11111111
+    i=portB
+ 
+  return 
+  
+  yaz:
+   portA.0=1 ' ADC entegresi okuma modunda veri gonderiyor ADC disable
+   trisB=0
+   lcdout $fe,1  'ekrani temizle
+   lcdout "sicaklik:",#i,1,"C"
+   lcdout $fe,192,"termostat:",#j,1,"C"  :pause 100
+   
+   return
+   
+   ayarla:
+   hserout["termostat degerini gir:" ,13,10 ]
+   hserin[dec j]
+   hserout["deger: ",dec j,13,10]
+   return
+   
+   
+  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

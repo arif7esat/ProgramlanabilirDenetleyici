@@ -1,0 +1,45 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 14.04.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+ADCON1=7
+TRISB=0
+TRISA=%010000
+PORTB=0
+PORTA=0
+i var byte
+j var byte
+i=1
+symbol goz=portA.4    ' goze ýsýk gelýyorken ileri gelmýyorken geri yonde surer
+
+
+label:
+    if goz=0 then 
+        gosub geri
+    else
+        gosub ileri
+    endif
+goto label
+
+ileri:
+    pulsout portA.2,100
+    i=i<<1
+    if i=16 then i=1
+        portB=i  :pause 100
+return
+        
+geri:
+    pulsout portA.2,100
+    i=i>>1
+    if i=0 then i=8
+        portB=i  :pause 100
+return
+        
+

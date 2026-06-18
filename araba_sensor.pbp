@@ -1,0 +1,86 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 24.03.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+
+'araba sensor
+DEFINE LOADER_USED 1
+DEFINE LCD_DREG PORTD
+DEFINE LCD_DBIT 0
+DEFINE LCD_RSREG PORTE
+DEFINE LCD_RSBIT 0
+DEFINE LCD_EREG PORTE
+DEFINE  LCD_EBIT 2
+DEFINE LCD_BITS 8
+TRISE=%000
+PortE.1=0
+ADCON1=7
+PAUSE 100
+
+DEFINE HSER_RCSTA 90h
+DEFINE HSER_TXSTA 24h
+DEFINE HSER_BAUD 9600
+DEFINE HSER_CLROERR 1
+
+symbol trigger=portB.7
+symbol echo=portB.6
+salinim var word
+mesafe var word
+sonuc_cm con 6
+trigger=0
+
+      LCDOUT $FE,$40, 1, 3, 7, 31, 16, 23, 7, 7
+      LCDOUT $FE,$48, 31, 4, 4, 31, 31, 31, 0, 0
+      LCDOUT $FE,$50, 16, 8, 4, 31, 1, 29, 28, 28
+      LCDOUT $FE,$58, 0, 0, 0, 0, 0, 31, 31, 0
+      LCDOUT $FE,$60, 0, 0, 0, 0, 31, 31, 31, 0
+      LCDOUT $FE,$68, 0, 0, 0, 31, 31, 31, 31, 0
+      LCDOUT $FE,$70, 0, 0, 31, 31, 31, 31, 31, 0
+      LCDOUT $FE,$78, 0, 31, 31, 31, 31, 31, 31, 0
+label:
+    gosub oku
+    lcdout $fe,1
+ 
+    if mesafe<=5 then lcdout 0,1,2,"_" : sound portA.5,[50,10]                                            
+    if mesafe>5 and mesafe<=10 then lcdout 0,1,2,"_",3 : sound portA.5,[50,20]  
+    if mesafe>10 and mesafe<=15 then lcdout 0,1,2,"_",3,4 : sound portA.5,[50,30]  
+    if mesafe>15 and mesafe<=20 then lcdout 0,1,2,"_",3,4,5: sound portA.5,[50,40]  
+    if mesafe>20 and mesafe<=25 then lcdout 0,1,2,"_",3,4,5,6 : sound portA.5,[50,50]  
+    if mesafe>25 then lcdout 0,1,2,"_",3,4,5,6,7   : sound portA.5,[5,60]  
+     
+     lcdout $fe,$C0,"mesafe: ",#mesafe," cm"
+
+     
+ goto label
+ 
+ oku:
+    pulsout trigger,1
+    pulsin echo,1,salinim
+    mesafe=(salinim/sonuc_cm)
+    pause 10
+ return
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

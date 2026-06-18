@@ -1,0 +1,55 @@
+'****************************************************************
+'*  Name    : UNTITLED.BAS                                      *
+'*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+'*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+'*          : All Rights Reserved                               *
+'*  Date    : 14.04.2026                                        *
+'*  Version : 1.0                                               *
+'*  Notes   :                                                   *
+'*          :                                                   *
+'****************************************************************
+DEFINE LOADER_USED 1
+ADCON1=7
+TRISB=0
+TRISA=0
+PORTB=0
+PORTA=0
+i var byte [4]
+i[1]=3
+i[2]=6
+i[3]=12
+i[4]=9
+j var byte
+k var byte
+k=0
+j=0
+
+label:
+    for k=0 to 47   ' motor 7.5 derece oldugu ýcýn 48 tur da 360 derece doner 48x7.5=360
+        gosub ileri
+    next k
+    
+    for k=0 to 47
+     gosub geri
+    next k
+    
+    
+goto label
+
+ileri:
+    pulsout portA.2,100
+    j=j+1
+    if j=5 then j=1
+        portB=i[j]  :pause 50
+return
+        
+geri:
+    pulsout portA.2,100
+    j=j-1
+    if j=0 then j=4
+        portB=i[j]  :pause 50
+return
+        
+
+
+

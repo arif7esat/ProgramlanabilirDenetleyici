@@ -1,0 +1,79 @@
+''****************************************************************
+''*  Name    : UNTITLED.BAS                                      *
+''*  Author  : [select VIEW...EDITOR OPTIONS]                    *
+''*  Notice  : Copyright (c) 2026 [select VIEW...EDITOR OPTIONS] *
+''*          : All Rights Reserved                               *
+''*  Date    : 2.03.2026                                         *
+''*  Version : 1.0                                               *
+''*  Notes   :                                                   *
+''*          :                                                   *
+''****************************************************************
+'displayde sayý yazdýrma
+DEFINE LOADER_USED 1
+ADCON1=7
+
+DEFINE HSER_RCSTA 90h
+DEFINE HSER_TXSTA 24h
+DEFINE HSER_BAUD 9600
+DEFINE HSER_SPBRG 25
+DEFINE HSER_CLROERR 1
+
+TRISA=0
+PortA=0
+TRISB=0
+PORTB=0
+i var byte 
+j var byte
+x var byte
+a var byte[10]
+a[0]=%00111111
+a[1]=%00000110
+a[2]=%01011011
+a[3]=%01001111
+a[4]=%01100110
+a[5]=%01101101
+a[6]=%01111101
+a[7]=%00000111
+a[8]=%01111111
+a[9]=%01101111
+
+
+'label:
+'    hserout["rakam girin: ",13,10]
+'    hserin [x]
+'    hserout["girilen sayi: "]
+'    hserout[dec (x-48),13,10]
+'    portB=a[x-48]
+'    x=0
+' goto label
+
+
+
+'0-99 arasý yazdýran 
+'birler var byte
+'onlar var byte
+
+'label:   
+'for i=0 to 99
+'birler=i dig 0
+'onlar=i dig 1
+'    for j=0 to 24
+'        portA.0=1:portA.1=0    ' portB ' yi ortak kullanmasýn dýye
+'        portB=a[birler]
+'        pause 10
+        
+'        portA.0=0:portA.1=1
+'        portB=a[onlar]
+'        pause 10
+    
+'     next j
+'next i
+
+'goto label
+
+
+
+
+
+
+
